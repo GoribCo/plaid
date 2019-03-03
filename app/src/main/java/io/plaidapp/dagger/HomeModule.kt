@@ -18,6 +18,7 @@ package io.plaidapp.dagger
 
 import android.app.Activity
 import android.content.Context
+import android.net.ConnectivityManager
 import com.bumptech.glide.util.ViewPreloadSizeProvider
 import dagger.Module
 import dagger.Provides
@@ -28,6 +29,7 @@ import io.plaidapp.core.dagger.SourcesRepositoryModule
 import io.plaidapp.core.dagger.dribbble.DribbbleDataModule
 import io.plaidapp.core.data.pocket.PocketUtils
 import io.plaidapp.core.dribbble.data.api.model.Shot
+import io.plaidapp.core.ui.ConnectivityChecker
 
 /**
  * Dagger module for [io.plaidapp.ui.HomeActivity].
@@ -56,4 +58,11 @@ class HomeModule(private val activity: Activity) {
 
     @Provides
     fun isPocketInstalled(): Boolean = PocketUtils.isPocketInstalled(activity)
+
+    @Provides
+    fun connectivityChecker(): ConnectivityChecker {
+        val connectivityManager =
+            activity.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        return ConnectivityChecker(connectivityManager)
+    }
 }
